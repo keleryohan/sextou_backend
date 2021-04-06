@@ -2,16 +2,16 @@
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
-  "username": "seedot_apigateway",
-  "password": "1234567",
-  "database": "seedot_apigateway",
+  "username": "postgres",
+  "password": "123456",
+  "database": "sextou",
   "entities": [
-    "./src/modules/**/infra/typeorm/entities/*.ts"
+    "./src/infra/typeorm/entities/*.ts"
   ],
   "migrations": [
-    "./src/shared/infra/typeorm/migrations/*.ts"
+    "./src/infra/typeorm/migrations/*.ts"
   ],
   "cli": {
-    "migrationsDir": "./src/shared/infra/typeorm/migrations"
+    "migrationsDir": "./src/infra/typeorm/migrations"
   }
 }
