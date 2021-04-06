@@ -17,6 +17,11 @@ export class CreateSchedule1617726799822 implements MigrationInterface {
                     name: 'date',
                     type: 'timestamp with time zone',
                 },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    default: 'now()',
+                },
             ],
             foreignKeys:[
                 {

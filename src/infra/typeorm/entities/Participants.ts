@@ -3,30 +3,31 @@ import {
     Column,
     PrimaryGeneratedColumn,
     CreateDateColumn,
+    UpdateDateColumn,
     ManyToOne,
     JoinColumn
   } from 'typeorm';
 
 import Event from './Event';
+import User from './User';
 
-@Entity("locations")
-class Location{
+@Entity("participants")
+class Participant{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    description: string;
-
-    @Column()
-    location: string;
-
-    @ManyToOne(() => Event)
+    @ManyToOne(() => Event )
     @JoinColumn({name: 'event_id'})
-    event: Event;
+    event: Event
+
+    @ManyToOne(() => User )
+    @JoinColumn({name: 'user_id'})
+    user: User
 
     @CreateDateColumn()
     created_at: Date;
 }
 
 
-export default Location;
+
+export default Participant;

@@ -23,7 +23,12 @@ export class CreateLocation1617726755012 implements MigrationInterface {
                     type: 'geography',
                     spatialFeatureType: 'Point',
                     srid: 4326,
-                }
+                },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    default: 'now()',
+                },
             ],
             foreignKeys:[
                 {

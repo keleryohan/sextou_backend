@@ -35,17 +35,16 @@ class Event{
     createdBy: Location;
 
     @ManyToOne(() => Location)
-    @JoinColumn({name: 'chosenLocationID'})
+    @JoinColumn({name: 'chosen_location_id'})
     chosenLocation: Location;
 
     @ManyToOne(() => Schedule)
-    @JoinColumn({name: 'chosenScheduleID'})
+    @JoinColumn({name: 'chosen_schedule_id'})
     chosenSchedule: Schedule;
 
     @ManyToMany(() => User)
     @JoinTable()
     users: User[];
-
 }
 
 export default Event;

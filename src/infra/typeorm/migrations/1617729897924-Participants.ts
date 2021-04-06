@@ -13,6 +13,11 @@ export class Participants1617729897924 implements MigrationInterface {
                     generationStrategy: 'uuid',
                     default: 'uuid_generate_v4()',
                 },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    default: 'now()',
+                },
             ],
             foreignKeys:[
                 {

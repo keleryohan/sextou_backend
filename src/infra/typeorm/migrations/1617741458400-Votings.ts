@@ -13,6 +13,11 @@ export class Votings1617741458400 implements MigrationInterface {
                     generationStrategy: 'uuid',
                     default: 'uuid_generate_v4()',
                 },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    default: 'now()',
+                },
             ],
             foreignKeys:[
                 {

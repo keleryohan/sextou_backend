@@ -14,12 +14,15 @@ class Schedule{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column('date with timestamp')
     date: Date;
 
     @ManyToOne(() => Event )
-    @JoinColumn({name: 'eventID'})
+    @JoinColumn({name: 'event_id'})
     event: Event
+
+    @CreateDateColumn()
+    created_at: Date;
 }
 
 export default Schedule;

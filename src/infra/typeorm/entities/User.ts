@@ -10,7 +10,7 @@ import {
 
 import Event from './Event';
 
-@Entity("events")
+@Entity("users")
 class User{
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -25,10 +25,10 @@ class User{
     name: string;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updated_at: Date;
 
     @ManyToMany(() => Event)
     @JoinTable()
