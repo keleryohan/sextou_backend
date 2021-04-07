@@ -26,12 +26,11 @@ class CreateUserService {
     const alreadyUser = await this.usersRepository.findByEmail(email);
 
     if (alreadyUser) {
-      console.log("ergre")
       throw new AppError("Email já utilizado");
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
-    
+
     const user = await this.usersRepository.create({
       name,
       password: hashedPassword,

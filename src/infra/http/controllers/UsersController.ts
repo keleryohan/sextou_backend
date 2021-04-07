@@ -5,7 +5,7 @@ import { classToClass } from 'class-transformer';
 import CreateUserService from '@services/CreateUserService';
 
 class UsersController {
-  public async create(request: Request, response: Response) {
+  public async create(request: Request, response: Response): Promise<Response> {
     const {
       name,
       email,

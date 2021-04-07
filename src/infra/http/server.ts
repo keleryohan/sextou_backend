@@ -2,9 +2,9 @@ import 'reflect-metadata';
 import 'dotenv/config';
 
 import express, { Request, Response, NextFunction } from 'express';
-import 'express-async-errors';
-import morgan from 'morgan';
 import cors from 'cors';
+import morgan from 'morgan';
+import 'express-async-errors';
 
 import '@infra/typeorm';
 import '@container/index';
@@ -17,8 +17,8 @@ const app = express();
 
 const port = process.env.PORT || 3333;
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('common'));
 app.use(routes);
