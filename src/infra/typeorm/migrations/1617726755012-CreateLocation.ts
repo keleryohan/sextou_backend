@@ -4,6 +4,7 @@ import {MigrationInterface, QueryRunner, Table} from "typeorm";
 export class CreateLocation1617726755012 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+      await queryRunner.createTable(
         new Table({
             name: 'locations',
             columns: [
@@ -29,18 +30,23 @@ export class CreateLocation1617726755012 implements MigrationInterface {
                     type: 'timestamp',
                     default: 'now()',
                 },
-            ],
-            foreignKeys:[
                 {
-                    name: "eventID",
-                    referencedTableName: "events",
-                    referencedColumnNames: ["id"],
-                    columnNames: ["eventID"],
-                    onDelete: "CASCADE",
-                    onUpdate: "CASCADE"
+                  name: "event_id",
+                  type: 'uuid'
                 }
-            ]
-        });
+            ],
+            // foreignKeys:[
+            //     {
+            //         name: "event_id",
+            //         referencedTableName: "events",
+            //         referencedColumnNames: ["id"],
+            //         columnNames: ["event_id"],
+            //         onDelete: "CASCADE",
+            //         onUpdate: "CASCADE"
+            //     }
+            // ]
+        })
+      );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

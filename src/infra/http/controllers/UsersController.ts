@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
+import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateUserService from '@services/CreateUserService';
-import UsersRepository from '@infra/typeorm/repositories/UsersRepository';
-//lida com request
 
 class UsersController {
   public async create(request: Request, response: Response) {
@@ -12,17 +12,15 @@ class UsersController {
       password
     } = request.body;
 
-    const usersRepository = new UsersRepository();
+    const createUser = container.resolve(CreateUserService);
 
-    const createUser = new CreateUserService(usersRepository);
-
-    const user = createUser.execute({
+    const user = await createUser.execute({
       name,
       email,
       password
     });
 
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 }
 

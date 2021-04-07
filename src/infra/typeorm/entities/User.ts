@@ -10,8 +10,10 @@ import {
 
 import Event from './Event';
 
+import { Exclude } from 'class-transformer';
+
 @Entity("users")
-class User{
+class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -19,6 +21,7 @@ class User{
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column()

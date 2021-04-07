@@ -1,21 +1,35 @@
-import User from '@entities/User';
-import IUsersRepository from '@repositories/IUsersRepository';
-//implementação, integração com o banco
+import { Repository, getRepository } from 'typeorm';
 
-let users:User[] = [];
+import User from '../entities/User';
+import IUsersRepository from '@repositories/IUsersRepository';
+
+import ICreateUserDTO from '@dtos/ICreateUserDTO';
 
 class UsersRepository implements IUsersRepository {
-  public async findByEmail(email: string): Promise<User | undefined> {
-    const foundUser = users.find(user => user.email == email);
+  private ormRepository: Repository<User>;
 
-    if (foundUser) {
-      return foundUser;
-    } 
-    return undefined;
+  constructor () {
+    this.ormRepository = getRepository(User);
+  }
+
+  public async findByEmail(email: string): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({
+      where: { email }
+    });
+
+    return user;
+  }
+
+  public async create(data: ICreateUserDTO): Promise<User> {
+    const user = this.ormRepository.create(data);
+
+    this.ormRepository.save(user);
+
+    return user;
   }
 
   public async save(user: User): Promise<void> {
-    users.push(user);
+    this.ormRepository.save(user);
   }
 }
 

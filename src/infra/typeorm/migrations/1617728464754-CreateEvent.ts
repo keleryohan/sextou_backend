@@ -3,6 +3,7 @@ import {MigrationInterface, QueryRunner, Table} from "typeorm";
 export class CreateEvent1617728464754 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+      await queryRunner.createTable(
         new Table({
             name: 'events',
             columns: [
@@ -30,6 +31,18 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                     type: 'timestamp',
                     default: 'now()',
                 },
+                {
+                  name: "chosen_location_id",
+                  type: 'uuid'
+                },
+                {
+                  name: "chosen_schedule_id",
+                  type: 'uuid'
+                },
+                {
+                  name: "created_by",
+                  type: 'uuid'
+                }
             ],
             foreignKeys:[
                 {
@@ -57,7 +70,8 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                     onUpdate: "CASCADE"
                 },
             ]
-        });
+        })
+      );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

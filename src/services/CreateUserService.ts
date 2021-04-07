@@ -1,6 +1,9 @@
+import { injectable, inject } from 'tsyringe';
 
-import User from '../entities/User';
+import User from '@infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '@container/providers/HashProvider/models/IHashProvider';
+import AppError from '@errors/AppError';
 
 interface IRequest {
   name: string;
@@ -8,34 +11,32 @@ interface IRequest {
   password: string;
 }
 
+@injectable()
 class CreateUserService {
   constructor (
-    private usersRepository: IUsersRepository
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) { }
 
-  public async execute({ name, email, password }: IRequest): Promise<User> {
-    /* TODO: 
-      - Verificar se existe user com esse email ?
-      - Validar se a senha é muita curta ou muito simples OK
-      - Salvar usuario ?
-    */
-    // if (password.length < 7) {
-      
-    // }
-    
-    const alreadyUser = await this.usersRepository.findByEmail("");
+  public async execute({ name, email, password }: IRequest): Promise<User> {  
+
+    const alreadyUser = await this.usersRepository.findByEmail(email);
 
     if (alreadyUser) {
-      throw new Error("");
+      console.log("ergre")
+      throw new AppError("Email já utilizado");
     }
 
-    const user = new User({
+    const hashedPassword = await this.hashProvider.generateHash(password);
+    
+    const user = await this.usersRepository.create({
       name,
-      password,
+      password: hashedPassword,
       email,
     });
-
-    await this.usersRepository.save(user);
 
     return user;
   }

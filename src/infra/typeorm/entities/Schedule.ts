@@ -14,7 +14,7 @@ class Schedule{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column('date with timestamp')
+    @Column('timestamp with time zone')
     date: Date;
 
     @ManyToOne(() => Event )
