@@ -1,25 +1,26 @@
-import Event from '../entities/Event';
-import User from '@entities/User';
+import { injectable, inject } from 'tsyringe';
+import { classToClass } from 'class-transformer';
+
+import Event from '../infra/typeorm/entities/Event';
+import User from '../infra/typeorm/entities/User';
 import IEventsRepository from '../repositories/IEventsRepository';
 
-
 interface IRequest {
-    current_user: User;
+  user_id: string;
+}
+
+@injectable()
+class ListEventService {
+  constructor (
+    @inject('EventsRepository')
+    private eventsRepository: IEventsRepository
+  ) { }
+
+  public async execute({ user_id }: IRequest): Promise<Event[]> {
+    let events = await this.eventsRepository.findByUser(user_id);
+
+    return classToClass(events);
   }
+}
 
-  class ListEventService {
-    constructor (
-      private eventsRepository: IEventsRepository
-    ) { }
-
-    public async execute({ current_user }: IRequest): Promise<Event[]> {
-
-    let events = await this.eventsRepository.findByUser(current_user);
-
-    return events;
-
-    }
-
-  }
-
-  export default ListEventService;
+export default ListEventService;

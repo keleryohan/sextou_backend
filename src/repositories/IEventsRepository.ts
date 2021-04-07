@@ -1,7 +1,9 @@
-import Event from '../entities/Event';
-import User from '../entities/User';
+import Event from '../infra/typeorm/entities/Event';
+
+import ICreateEventDTO from '@dtos/ICreateEventDTO';
 
 export default interface IEventsRepository{
-    findByUser(user: User): Promise<Event[] | undefined>;
-    save(event: Event): Promise<Event | undefined>;
+    findByUser(user_id: string): Promise<Event[]>;
+    create(event: ICreateEventDTO): Promise<Event>;
+    save(event: Event): Promise<Event>;
   }

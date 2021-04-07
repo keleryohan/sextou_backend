@@ -1,39 +1,33 @@
-import Event from '../entities/Event';
-import User from '@entities/User';
+import { injectable, inject } from 'tsyringe';
+
+import Event from '../infra/typeorm/entities/Event';
 import IEventsRepository from '../repositories/IEventsRepository';
 
-
 interface IRequest {
-    name: string;
-    description: string;
-    voting_limit_date: Date;
-    user_creator: User;
+  name: string;
+  description: string;
+  voting_limit_date: Date;
+  created_by: string;
+}
+
+@injectable()
+class CreateEventService {
+  constructor (
+    @inject('EventsRepository')
+    private eventsRepository: IEventsRepository
+  ) { }
+  
+  public async execute({ name, description, voting_limit_date, created_by }: IRequest): Promise<Event> {
+      console.log(created_by);
+      const event = await this.eventsRepository.create({ 
+        name, 
+        created_by, 
+        description, 
+        voting_limit_date 
+      });
+
+      return event;
   }
-
-
-  class CreateEventService {
-    constructor (
-      private eventsRepository: IEventsRepository
-    ) { }
-
-
-    public async execute({ name, description, voting_limit_date, user_creator }: IRequest): Promise<Event> {
-
-        const event = new Event(
-            {
-                name: name,
-                description: description,
-                votingLimitDate: voting_limit_date,
-                user_creator: user_creator
-            }
-        );
-
-        await this.eventsRepository.save(event);
-
-        return event;
-
-
-    }
-    }
+}
 
 export default CreateEventService;

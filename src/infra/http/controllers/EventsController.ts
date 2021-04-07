@@ -1,39 +1,35 @@
+import { container } from 'tsyringe';
 import { Request, Response } from 'express';
 
 import CreateEventsService from '@services/CreateEventService';
 import ListEventService from '@services/ListEventService';
-import EventsRepository from '@infra/typeorm/repositories/EventsRepository';
 
 class EventsController {
-    public async create(request: Request, response: Response) {
-
+    public async create(request: Request, response: Response): Promise<Response> {
         const {
             name,
             description,
             voting_limit_date,
-            user_creator
         } = request.body;
 
-        const eventsRepository = new EventsRepository();
-        const createEvent = new CreateEventsService(eventsRepository);
+        const createEvent = container.resolve(CreateEventsService);
 
-        const event = createEvent.execute({
+        const event = await createEvent.execute({
             name,
             description,
             voting_limit_date,
-            user_creator
-        })
+            created_by: request.user.id
+        });
 
+        return response.json(event);
     }
 
-    public async show(request: Request, response: Response){
-        const current_user = request.body;
+    public async show(request: Request, response: Response): Promise<Response> {
+        const listEvent = container.resolve(ListEventService);
 
-        const eventsRepository = new EventsRepository();
-        const listEvent = new ListEventService(eventsRepository);
-
-        const events = listEvent.execute({current_user});
+        const events = await listEvent.execute({user_id: request.user.id});
         
+        return response.json(events);
     }
 }
 

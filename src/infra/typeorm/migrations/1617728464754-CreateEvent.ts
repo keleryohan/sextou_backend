@@ -33,11 +33,13 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                 },
                 {
                   name: "chosen_location_id",
-                  type: 'uuid'
+                  type: 'uuid',
+                  isNullable: true
                 },
                 {
                   name: "chosen_schedule_id",
-                  type: 'uuid'
+                  type: 'uuid',
+                  isNullable: true
                 },
                 {
                   name: "created_by",
@@ -50,7 +52,7 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                     referencedTableName: "locations",
                     referencedColumnNames: ["id"],
                     columnNames: ["chosen_location_id"],
-                    onDelete: "CASCADE",
+                    onDelete: 'CASCADE',
                     onUpdate: "CASCADE"
                 },
                 {
@@ -58,7 +60,7 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                     referencedTableName: "schedules",
                     referencedColumnNames: ["id"],
                     columnNames: ["chosen_schedule_id"],
-                    onDelete: "CASCADE",
+                    onDelete: 'CASCADE',
                     onUpdate: "CASCADE"
                 },
                 {

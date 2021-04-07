@@ -29,22 +29,31 @@ class Event{
 
     @Column()
     voting_limit_date: Date;
+    
+    @Column()
+    created_by: string;
 
     @ManyToOne(() => User)
     @JoinColumn({name: 'created_by'})
-    createdBy: Location;
+    created_by_user: User;
+        
+    @Column()
+    chosen_location_id: string;
 
     @ManyToOne(() => Location)
     @JoinColumn({name: 'chosen_location_id'})
-    chosenLocation: Location;
+    chosen_location: Location;
 
     @ManyToOne(() => Schedule)
     @JoinColumn({name: 'chosen_schedule_id'})
-    chosenSchedule: Schedule;
+    chosen_schedule: Schedule;
 
-    @ManyToMany(() => User)
-    @JoinTable()
-    users: User[];
+    @Column()
+    chosen_schedule_id: string;
+
+    // @ManyToMany(() => User)
+    // @JoinTable()
+    // users: User[];
 }
 
 export default Event;
