@@ -28,7 +28,7 @@ export class CreateSchedule1617726799822 implements MigrationInterface {
                   type: 'uuid'
                 }
             ],
-            // foreignKeys:[
+            //foreignKeys:[
             //     {
             //         name: "event_id",
             //         referencedTableName: "events",

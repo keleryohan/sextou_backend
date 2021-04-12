@@ -17,9 +17,16 @@ class Schedule{
     @Column('timestamp with time zone')
     date: Date;
 
-    @ManyToOne(() => Event )
+    @Column()
+    event_id: string;
+
+    // @ManyToOne(() => Event )
+    // @JoinColumn({name: 'event_id'})
+    // event: Event
+
+    @ManyToOne(() => Event, event => event.schedules)
     @JoinColumn({name: 'event_id'})
-    event: Event
+    event: Event;
 
     @CreateDateColumn()
     created_at: Date;

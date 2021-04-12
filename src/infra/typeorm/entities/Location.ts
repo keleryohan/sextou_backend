@@ -20,12 +20,21 @@ class Location{
     @Column()
     location: string;
 
-    @ManyToOne(() => Event)
+    @Column()
+    event_id: string;
+
+    // @ManyToOne(() => Event)
+    // @JoinColumn({name: 'event_id'})
+    // event: Event;
+
+    @ManyToOne(() => Event, event => event.locations)
     @JoinColumn({name: 'event_id'})
     event: Event;
 
     @CreateDateColumn()
     created_at: Date;
+
+
 }
 
 

@@ -33,9 +33,9 @@ class User {
     @UpdateDateColumn()
     updated_at: Date;
 
-    @ManyToMany(() => Event)
-    @JoinTable()
-    events: Event[];
+    //@ManyToMany(() => Event)
+    //@JoinTable()
+    //events: Event[];
 }
 
 

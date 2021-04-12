@@ -27,6 +27,10 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                     type: 'timestamp with time zone',
                 },
                 {
+                    name: 'is_public',
+                    type: 'boolean'
+                },
+                {
                     name: 'created_at',
                     type: 'timestamp',
                     default: 'now()',

@@ -1,8 +1,11 @@
 import { container } from 'tsyringe';
 import { Request, Response } from 'express';
+import { parseISO } from 'date-fns';
 
 import CreateEventsService from '@services/CreateEventService';
 import ListEventService from '@services/ListEventService';
+
+import ICoordinate from '@dtos/ICoordinateDTO';
 
 class EventsController {
     public async create(request: Request, response: Response): Promise<Response> {
@@ -10,18 +13,31 @@ class EventsController {
             name,
             description,
             voting_limit_date,
+            coordinates,
+            schedules,
+            is_public
         } = request.body;
+        
+        let is_public_normalized = is_public.trim().toLowerCase();
+        let is_public_parsed = is_public_normalized === 'true' || is_public_normalized === '1';
+
+        const schedules_formated: Date[] = (schedules as string[]).map(schedule => {
+            return parseISO(schedule);
+        });
 
         const createEvent = container.resolve(CreateEventsService);
 
-        const event = await createEvent.execute({
+        const { event, schedules:schedule_list } = await createEvent.execute({
             name,
             description,
             voting_limit_date,
+            coordinates: coordinates as ICoordinate[],
+            schedules: schedules_formated,
+            is_public: is_public_parsed,
             created_by: request.user.id
         });
 
-        return response.json(event);
+        return response.json({ event, schedules: schedule_list });
     }
 
     public async show(request: Request, response: Response): Promise<Response> {

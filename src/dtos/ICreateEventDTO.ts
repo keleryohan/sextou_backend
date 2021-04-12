@@ -3,4 +3,5 @@ export default interface ICreateEventDTO {
   description: string;
   voting_limit_date: Date;
   created_by: string;
+  is_public: boolean;
 }

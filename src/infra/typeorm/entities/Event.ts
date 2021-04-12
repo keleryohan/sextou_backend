@@ -5,7 +5,9 @@ import {
     CreateDateColumn,
     ManyToOne,
     JoinColumn,
-    ManyToMany,
+    OneToMany,
+    OneToOne,
+      ManyToMany,
     JoinTable
   } from 'typeorm';
 
@@ -33,6 +35,9 @@ class Event{
     @Column()
     created_by: string;
 
+    @Column()
+    is_public: boolean;
+
     @ManyToOne(() => User)
     @JoinColumn({name: 'created_by'})
     created_by_user: User;
@@ -40,11 +45,11 @@ class Event{
     @Column()
     chosen_location_id: string;
 
-    @ManyToOne(() => Location)
+    @OneToOne(() => Location)
     @JoinColumn({name: 'chosen_location_id'})
     chosen_location: Location;
 
-    @ManyToOne(() => Schedule)
+    @OneToOne(() => Schedule)
     @JoinColumn({name: 'chosen_schedule_id'})
     chosen_schedule: Schedule;
 
@@ -54,6 +59,12 @@ class Event{
     // @ManyToMany(() => User)
     // @JoinTable()
     // users: User[];
-}
+    
+    @OneToMany(() => Location, location => location.event)
+    locations: Location[];
+    
+    @OneToMany(() => Schedule, schedule => schedule.event)
+    schedules: Schedule[];
+}  
 
 export default Event;
