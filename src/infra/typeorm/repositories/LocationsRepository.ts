@@ -15,9 +15,9 @@ class LocationsRepository implements ILocationsRepository {
 
   public async create(data:ICreateLocationDTO): Promise<Location> {    
     const location: Location = await this.ormRepository.query(
-      'INSERT INTO locations (event_id, description, location) ' + 
-      'VALUES ($1, $2, ST_SetSRID(ST_MakePoint($3,$4), 4326 ))',
-      [data.event_id, data.description, data.latitude, data.longitude]
+      'INSERT INTO locations (event_id, description, latitude, longitude, location) ' + 
+      'VALUES ($1, $2,$3,$4, ST_SetSRID(ST_MakePoint($5,$6), 4326 ))',
+      [data.event_id, data.description, data.latitude, data.longitude ,data.latitude, data.longitude]
     );
     
     return location;
@@ -26,7 +26,7 @@ class LocationsRepository implements ILocationsRepository {
   public async findById(id: string): Promise<Location> {
     const location = await this.ormRepository
       .createQueryBuilder('')
-      .select(['id', 'description', 'ST_Y(location) AS latitude', 'ST_X(location) AS longitude'])
+      .select(['id', 'description','latitude', 'longitude' , 'ST_Y(location) AS latitude', 'ST_X(location) AS longitude'])
       .where(`id = ${id}`)
       .getOne();
     

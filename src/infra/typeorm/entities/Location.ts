@@ -21,6 +21,12 @@ class Location{
     location: string;
 
     @Column()
+    latitude: string;
+
+    @Column()
+    longitude: string;
+
+    @Column()
     event_id: string;
 
     // @ManyToOne(() => Event)

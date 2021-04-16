@@ -20,6 +20,15 @@ export class CreateLocation1617726755012 implements MigrationInterface {
                     type: 'varchar',
                 },
                 {
+                    name: 'latitude',
+                    type: 'varchar'
+                },
+                {
+                    name: 'longitude',
+                    type: 'varchar'
+                },
+
+                {
                     name: 'location',
                     type: 'geography',
                     spatialFeatureType: 'Point',
