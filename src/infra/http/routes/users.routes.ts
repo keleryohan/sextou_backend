@@ -7,4 +7,6 @@ const usersController = new UsersController();
 
 router.post('/', usersController.create);
 
+router.get('/participants', usersController.getParticipants);
+
 export default router;

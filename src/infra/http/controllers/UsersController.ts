@@ -3,8 +3,23 @@ import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
 import CreateUserService from '@services/CreateUserService';
+import ListParticipantsService from '@services/ListParticipantsService';
+
 
 class UsersController {
+  public async getParticipants(request:Request, response: Response) : Promise<Response>{
+    const{
+      event_id
+    } = request.body;
+
+    const listParticipants = container.resolve(ListParticipantsService);
+
+    const participants = await listParticipants.execute({event_id})
+
+    return response.json(classToClass(participants));
+  }
+
+
   public async create(request: Request, response: Response): Promise<Response> {
     const {
       name,

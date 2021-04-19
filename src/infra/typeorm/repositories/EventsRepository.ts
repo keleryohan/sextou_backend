@@ -27,6 +27,7 @@ class EventsRepository implements IEventsRepository {
         return events;
     }
 
+
     public async create(data: ICreateEventDTO): Promise<Event> {
         //console.log(data);
         const event = this.ormRepository.create(data);

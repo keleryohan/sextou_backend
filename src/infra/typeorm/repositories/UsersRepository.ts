@@ -1,6 +1,7 @@
 import { Repository, getRepository } from 'typeorm';
 
 import User from '../entities/User';
+import Participant from '../entities/Participants';
 import IUsersRepository from '@repositories/IUsersRepository';
 
 import ICreateUserDTO from '@dtos/ICreateUserDTO';
@@ -18,6 +19,15 @@ class UsersRepository implements IUsersRepository {
     });
 
     return user;
+  }
+
+  public async findParticipants(eventID: string) : Promise<User[]>{
+    const users = await getRepository(User).createQueryBuilder('user').
+    leftJoinAndSelect(Participant,"participant","participant.user_id = user.id").
+    where('participant.event_id = :event_ID', {event_ID: eventID}).
+    getMany();
+
+    return users;
   }
 
   public async create(data: ICreateUserDTO): Promise<User> {
