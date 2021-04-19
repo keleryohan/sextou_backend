@@ -31,6 +31,10 @@ export class CreateEvent1617728464754 implements MigrationInterface {
                     type: 'boolean'
                 },
                 {
+                    name: 'invitation_code',
+                    type: 'varchar'
+                },
+                {
                     name: 'created_at',
                     type: 'timestamp',
                     default: 'now()',

@@ -4,10 +4,20 @@ import { parseISO } from 'date-fns';
 
 import CreateEventsService from '@services/CreateEventService';
 import ListEventService from '@services/ListEventService';
+import ChangeInvitationCodeService from '@services/ChangeInvitationCodeService'
 
 import ICoordinate from '@dtos/ICoordinateDTO';
 
 class EventsController {
+    public async updateInvitationCode(request: Request, response: Response): Promise<Response>{
+        const {event_id} = request.body;
+        const updateEvent = container.resolve(ChangeInvitationCodeService);
+
+        const updatedCode = await updateEvent.execute(event_id);
+
+        return response.json(updatedCode);
+    }
+
     public async create(request: Request, response: Response): Promise<Response> {
         const {
             name,

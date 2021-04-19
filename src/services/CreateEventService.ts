@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import crypto from 'crypto'
 
 import Event from '../infra/typeorm/entities/Event';
 import Location from '../infra/typeorm/entities/Location';
@@ -38,13 +39,16 @@ class CreateEventService {
   ) { }
   
   public async execute({ name, description, voting_limit_date, created_by, coordinates, is_public, schedules }: IRequest): Promise<IResponse> {
-      //console.log(created_by);
+      let current_date = (new Date()).valueOf().toString();
+      const invitation_code = crypto.createHash('sha1').update(current_date).digest('hex');
+
       const event = await this.eventsRepository.create({ 
         name, 
         created_by, 
         description, 
         voting_limit_date,
-        is_public
+        is_public,
+        invitation_code
       });
 
       const createLocationsPromises = coordinates.map(coordinate => {

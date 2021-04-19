@@ -1,4 +1,5 @@
 import {getRepository, Repository} from 'typeorm';
+import crypto from 'crypto'
 
 import Event from '@infra/typeorm/entities/Event';
 import User from '@infra/typeorm/entities/User';
@@ -41,6 +42,20 @@ class EventsRepository implements IEventsRepository {
         await this.ormRepository.save(event);
 
         return event;
+    }
+
+    public async updateInvitationCode(event_id: String): Promise<string>{
+        let current_date = (new Date()).valueOf().toString();
+        const invitation_code = crypto.createHash('sha1').update(current_date).digest('hex');
+
+        await getRepository(Event).createQueryBuilder('event')
+        .update(Event)
+        .set({ invitation_code: invitation_code})
+        .where("id = :id", { id: event_id })
+        .execute();
+
+        return invitation_code;
+
     }
 
     public async save(event: Event): Promise<Event>{

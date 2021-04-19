@@ -38,6 +38,9 @@ class Event{
     @Column()
     is_public: boolean;
 
+    @Column()
+    invitation_code: string;
+
     @ManyToOne(() => User)
     @JoinColumn({name: 'created_by'})
     created_by_user: User;
