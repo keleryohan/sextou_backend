@@ -3,7 +3,6 @@ import { classToClass } from 'class-transformer';
 
 import User from '../infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
-
 interface IRequest {
   event_id: string;
 }
@@ -16,7 +15,7 @@ class ListParticipantsService {
   ) { }
 
   public async execute({ event_id }: IRequest): Promise<User[]> {
-    let users = await this.usersRepository.findParticipants(event_id);
+    const users = await this.usersRepository.findParticipants(event_id); 
 
     return classToClass(users);
   }

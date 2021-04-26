@@ -5,6 +5,7 @@ import Event from '@infra/typeorm/entities/Event';
 import User from '@infra/typeorm/entities/User';
 import IEventsRepository from '@repositories/IEventsRepository';
 import ICreateEventDTO from '@dtos/ICreateEventDTO';
+import eventsRouter from '@infra/http/routes/events.routes';
 
 class EventsRepository implements IEventsRepository {
     private ormRepository: Repository<Event>;
@@ -28,6 +29,21 @@ class EventsRepository implements IEventsRepository {
         return events;
     }
 
+    public async findNearby(latitude:string, longitude: string, radius: number): Promise<Event[]>{
+
+        //todo: testar, adicionar requirimento que o evento tenha um local selecionado
+        const events = await getRepository(Event).query(
+            `
+                SELECT event.id
+                FROM events AS event INNER JOIN locations AS location ON event.id=location.event_id
+                WHERE ST_Distance(location.location, ST_MakePoint($1,$2) ) < $3
+            `,
+            [latitude, longitude, radius]
+        )
+
+        return events;
+    }
+
 
     public async create(data: ICreateEventDTO): Promise<Event> {
         //console.log(data);
@@ -43,6 +59,8 @@ class EventsRepository implements IEventsRepository {
 
         return event;
     }
+
+    
 
     public async updateInvitationCode(event_id: String): Promise<string>{
         let current_date = (new Date()).valueOf().toString();

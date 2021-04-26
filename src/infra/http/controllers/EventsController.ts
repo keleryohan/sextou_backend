@@ -5,6 +5,7 @@ import { parseISO } from 'date-fns';
 import CreateEventsService from '@services/CreateEventService';
 import ListEventService from '@services/ListEventService';
 import ChangeInvitationCodeService from '@services/ChangeInvitationCodeService'
+import ListNearbyEventsService from '@services/ListNearbyEventsService';
 
 import ICoordinate from '@dtos/ICoordinateDTO';
 
@@ -16,6 +17,17 @@ class EventsController {
         const updatedCode = await updateEvent.execute(event_id);
 
         return response.json(updatedCode);
+    }
+
+    public async getNearby(request: Request, response: Response): Promise<Response>{
+        const{latitude, longitude, radius} = request.body;
+
+        const listNearby = container.resolve(ListNearbyEventsService);
+
+        const events = listNearby.execute({latitude,longitude,radius});
+
+        return response.json(events);
+
     }
 
     public async create(request: Request, response: Response): Promise<Response> {

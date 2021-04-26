@@ -12,5 +12,6 @@ eventsRouter.use(ensureAuthenticated);
 eventsRouter.post('/', eventsController.create);
 eventsRouter.get('/me', eventsController.show);
 eventsRouter.patch('/updateInvite', eventsController.updateInvitationCode);
+eventsRouter.get('/nearby', eventsController.getNearby);
 
 export default eventsRouter;
