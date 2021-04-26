@@ -1,4 +1,4 @@
-import {getRepository, Repository} from 'typeorm';
+import {Any, getRepository, Repository} from 'typeorm';
 import crypto from 'crypto'
 
 import Event from '@infra/typeorm/entities/Event';
@@ -32,14 +32,27 @@ class EventsRepository implements IEventsRepository {
     public async findNearby(latitude:string, longitude: string, radius: number): Promise<Event[]>{
 
         //todo: testar, adicionar requirimento que o evento tenha um local selecionado
-        const events = await getRepository(Event).query(
+        const nearby_events_id = await getRepository(Event).query(
             `
                 SELECT event.id
                 FROM events AS event INNER JOIN locations AS location ON event.id=location.event_id
-                WHERE ST_Distance(location.location, ST_MakePoint($1,$2) ) < $3
+                WHERE ST_Distance(location.location, ST_MakePoint($1,$2)) < $3
             `,
             [latitude, longitude, radius]
         )
+
+        let events_id:string[] = [];
+        nearby_events_id.forEach(event => {
+            events_id.push(event["id"]);
+        });
+
+        //console.debug(events_id);
+
+        const events = await getRepository(Event).createQueryBuilder('event').
+            where('event.id IN (:...event_IDs)', {event_IDs: events_id}).
+            getMany();
+
+        console.debug(events);
 
         return events;
     }
