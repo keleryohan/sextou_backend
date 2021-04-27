@@ -7,6 +7,10 @@ import IEventsRepository from '@repositories/IEventsRepository';
 import ICreateEventDTO from '@dtos/ICreateEventDTO';
 import eventsRouter from '@infra/http/routes/events.routes';
 
+type EventId =  { 
+    id: string 
+}
+
 class EventsRepository implements IEventsRepository {
     private ormRepository: Repository<Event>;
 
@@ -29,10 +33,26 @@ class EventsRepository implements IEventsRepository {
         return events;
     }
 
+    public async findById(event_id: string): Promise<Event | undefined> {
+        const event = await this.ormRepository.findOne({
+            id: event_id
+        })
+
+        return event;
+    }
+
+    public async findByInvitationCode(invitation_code: string): Promise<Event | undefined> {
+        const event = await this.ormRepository.findOne({
+            invitation_code: invitation_code
+        })
+
+        return event;
+    }
+
     public async findNearby(latitude:string, longitude: string, radius: number): Promise<Event[]>{
 
         //todo: testar, adicionar requirimento que o evento tenha um local selecionado
-        const nearby_events_id = await getRepository(Event).query(
+        const nearby_events_id: EventId[] = await getRepository(Event).query(
             `
                 SELECT event.id
                 FROM events AS event INNER JOIN locations AS location ON event.id=location.event_id
@@ -41,18 +61,16 @@ class EventsRepository implements IEventsRepository {
             [latitude, longitude, radius]
         )
 
-        let events_id:string[] = [];
-        nearby_events_id.forEach(event => {
-            events_id.push(event["id"]);
-        });
+        if(!nearby_events_id.length){
+            return [];
+        }
 
-        //console.debug(events_id);
+        let events_id = nearby_events_id.map(event => event['id']);
 
-        const events = await getRepository(Event).createQueryBuilder('event').
-            where('event.id IN (:...event_IDs)', {event_IDs: events_id}).
-            getMany();
-
-        console.debug(events);
+        const events = await getRepository(Event)
+            .createQueryBuilder('event')
+            .where('event.id IN (:...event_IDs)', {event_IDs: events_id})
+            .getMany();
 
         return events;
     }

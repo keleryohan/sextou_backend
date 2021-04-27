@@ -15,6 +15,8 @@ import Location from './Location';
 import Schedule from './Schedule';
 import User from './User';
 
+import { Expose } from 'class-transformer';
+
 @Entity("events")
 class Event{
     @PrimaryGeneratedColumn('uuid')
@@ -40,6 +42,18 @@ class Event{
 
     @Column()
     invitation_code: string;
+
+    @Column()
+    img: string;
+
+    @Expose({ name: 'img_url'})
+    getImgUrl(): string | null {
+      if (!this.img) {
+        return null;
+      }
+
+      return `${process.env.APP_API_URL}/files/${this.img}`;
+    }
 
     @ManyToOne(() => User)
     @JoinColumn({name: 'created_by'})

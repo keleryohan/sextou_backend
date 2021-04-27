@@ -7,6 +7,7 @@ import Schedule from '../infra/typeorm/entities/Schedule';
 import IEventsRepository from '../repositories/IEventsRepository';
 import ILocationsRepository from '../repositories/ILocationsRepository';
 import ISchedulesRepository from '../repositories/ISchedulesRepository';
+import IStorageProvider from '@container/providers/StorageProvider/models/IStorageProvider';
 import ICoordinate from '../dtos/ICoordinateDTO';
 
 interface IRequest {
@@ -17,6 +18,7 @@ interface IRequest {
   coordinates: ICoordinate[];
   is_public: boolean;
   schedules: Date[];
+  imgFilename: string;
 }
 
 interface IResponse {
@@ -36,11 +38,24 @@ class CreateEventService {
     @inject('SchedulesRepository')
     private schedulesRepository: ISchedulesRepository,
 
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider,
   ) { }
   
-  public async execute({ name, description, voting_limit_date, created_by, coordinates, is_public, schedules }: IRequest): Promise<IResponse> {
+  public async execute({ 
+    name,
+    description,
+    voting_limit_date,
+    created_by,
+    coordinates,
+    is_public,
+    schedules,
+    imgFilename }: IRequest): Promise<IResponse> {
       let current_date = (new Date()).valueOf().toString();
+      
       const invitation_code = crypto.createHash('sha1').update(current_date).digest('hex');
+      
+      const filename = await this.storageProvider.saveFile(imgFilename);
 
       const event = await this.eventsRepository.create({ 
         name, 
@@ -48,7 +63,8 @@ class CreateEventService {
         description, 
         voting_limit_date,
         is_public,
-        invitation_code
+        invitation_code,
+        img: filename
       });
 
       const createLocationsPromises = coordinates.map(coordinate => {

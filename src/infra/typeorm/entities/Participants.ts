@@ -16,6 +16,12 @@ class Participant{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column()
+    event_id: string;
+
+    @Column()
+    user_id: string;
+
     @ManyToOne(() => Event )
     @JoinColumn({name: 'event_id'})
     event: Event

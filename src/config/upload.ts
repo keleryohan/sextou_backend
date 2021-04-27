@@ -9,7 +9,10 @@ interface IUploadConfig {
   uploadsFolder: string;
   multer: {
     storage: StorageEngine;
-  };
+  },
+  config: {
+    disk: {}
+  }
 }
 
 export default {

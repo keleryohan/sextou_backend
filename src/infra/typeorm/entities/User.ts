@@ -10,7 +10,7 @@ import {
 
 import Event from './Event';
 
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity("users")
 class User {
@@ -27,15 +27,23 @@ class User {
     @Column()
     name: string;
 
+    @Column()
+    avatar: string;
+
     @CreateDateColumn()
     created_at: Date;
 
     @UpdateDateColumn()
     updated_at: Date;
 
-    //@ManyToMany(() => Event)
-    //@JoinTable()
-    //events: Event[];
+    @Expose({ name: 'avatar_url' })
+    getAvatarUrl(): string | null {
+      if (!this.avatar) {
+        return null;
+      }
+
+      return `${process.env.APP_API_URL}/files/${this.avatar}`;
+    }
 }
 
 

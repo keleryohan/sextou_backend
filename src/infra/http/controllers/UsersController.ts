@@ -4,6 +4,7 @@ import { classToClass } from 'class-transformer';
 
 import CreateUserService from '@services/CreateUserService';
 import ListParticipantsService from '@services/ListParticipantsService';
+import AddParticipantService from '@services/AddParticipantService';
 
 
 class UsersController {
@@ -15,6 +16,18 @@ class UsersController {
     const listParticipants = container.resolve(ListParticipantsService);
 
     const participants = await listParticipants.execute({event_id})
+
+    return response.json(classToClass(participants));
+  }
+
+  public async addParticipant(request:Request, response: Response) : Promise<Response>{
+    const { event_id } = request.body;
+
+    const user_id = request.user.id;
+
+    const addParticipants = container.resolve(AddParticipantService);
+
+    const participants = await addParticipants.execute({event_id,user_id});
 
     return response.json(classToClass(participants));
   }

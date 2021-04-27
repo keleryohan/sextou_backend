@@ -5,4 +5,5 @@ export default interface ICreateEventDTO {
   created_by: string;
   is_public: boolean;
   invitation_code: string;
+  img: string;
 }

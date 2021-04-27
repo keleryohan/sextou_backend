@@ -10,7 +10,7 @@ interface IRequest {
 @injectable()
 class ListParticipantsService {
   constructor (
-    @inject('EventsRepository')
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository
   ) { }
 

@@ -5,25 +5,21 @@ import Event from '../infra/typeorm/entities/Event';
 import IEventsRepository from '../repositories/IEventsRepository';
 
 interface IRequest {
-  latitude: string;
-  longitude: string;
-  radius: number;
+    invitation_code: string;
 }
 
 @injectable()
-class ListNearbyEventService {
+class ListEventByInvitationCodeService {
   constructor (
     @inject('EventsRepository')
     private eventsRepository: IEventsRepository
   ) { }
 
-  public async execute({ latitude, longitude, radius }: IRequest): Promise<Event[]> {
-    let events = await this.eventsRepository.findNearby(latitude, longitude, radius);
-
-    //console.debug(events);
+  public async execute({invitation_code} : IRequest): Promise<Event|undefined> {
+    let events = await this.eventsRepository.findByInvitationCode(invitation_code); 
 
     return classToClass(events);
   }
 }
 
-export default ListNearbyEventService;
+export default ListEventByInvitationCodeService;

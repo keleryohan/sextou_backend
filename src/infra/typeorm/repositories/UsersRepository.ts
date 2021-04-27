@@ -13,6 +13,14 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getRepository(User);
   }
 
+  public async findById(id: string): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({
+      where: { id }
+    });
+
+    return user;
+  }
+
   public async findByEmail(email: string): Promise<User | undefined> {
     const user = await this.ormRepository.findOne({
       where: { email }
@@ -22,10 +30,15 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async findParticipants(eventID: string) : Promise<User[]>{
-    const users = await getRepository(User).createQueryBuilder('user').
-    leftJoinAndSelect(Participant,"participant","participant.user_id = user.id").
-    where('participant.event_id = :event_ID', {event_ID: eventID}).
-    getMany();
+    const users = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(
+        Participant,
+        "participant",
+        "participant.user_id = user.id"
+      )
+      .where('participant.event_id = :event_ID', { event_ID: eventID })
+      .getMany();
 
     return users;
   }

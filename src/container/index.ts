@@ -14,6 +14,9 @@ import LocationsRepository from '@infra/typeorm/repositories/LocationsRepository
 import ISchedulesRepository from '@repositories/ISchedulesRepository';
 import SchedulesRepositoy from '@infra/typeorm/repositories/SchedulesRepository';
 
+import IParticipantsRepository from '@repositories/IParticipantsRepository';
+import ParticipantsRepository from '@infra/typeorm/repositories/ParticipantsRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository
@@ -31,4 +34,8 @@ container.registerSingleton<ILocationsRepository>(
 container.registerSingleton<ISchedulesRepository>(
   'SchedulesRepository',
   SchedulesRepositoy
+)
+container.registerSingleton<IParticipantsRepository>(
+  'ParticipantsRepository',
+  ParticipantsRepository
 )
