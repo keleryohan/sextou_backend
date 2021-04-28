@@ -21,13 +21,18 @@ class UsersController {
   }
 
   public async addParticipant(request:Request, response: Response) : Promise<Response>{
-    const { event_id } = request.body;
+    const { event_id, location_id, schedule_id } = request.body;
 
     const user_id = request.user.id;
 
     const addParticipants = container.resolve(AddParticipantService);
 
-    const participants = await addParticipants.execute({event_id,user_id});
+    const participants = await addParticipants.execute({
+      event_id,
+      user_id,
+      location_id,
+      schedule_id
+    });
 
     return response.json(classToClass(participants));
   }

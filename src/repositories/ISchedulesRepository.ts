@@ -1,9 +1,10 @@
-import Schedules from '@infra/typeorm/entities/Schedule';
+import Schedule from '@infra/typeorm/entities/Schedule';
 
 import ICreateScheduleDTO from '../dtos/ICreateScheduleDTO';
 
-interface ILocationsRepository {
-  create(data: ICreateScheduleDTO): Promise<Schedules>;
+interface ISchedulesRepository {
+  create(data: ICreateScheduleDTO): Promise<Schedule>;
+  getVotedSchedule(event_id: string): Promise<Schedule | undefined>;
 }
 
-export default ILocationsRepository;
+export default ISchedulesRepository;

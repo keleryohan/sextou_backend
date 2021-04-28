@@ -5,6 +5,7 @@ import ICreateLocationDTO from '../dtos/ICreateLocationDTO';
 interface ILocationsRepository {
   create(data: ICreateLocationDTO): Promise<Location>;
   findById(id: string): Promise<Location | undefined>;
+  getVotedLocation(event_id: string): Promise<Location | undefined>;
 }
 
 export default ILocationsRepository;

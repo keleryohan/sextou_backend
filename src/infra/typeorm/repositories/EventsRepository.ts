@@ -43,7 +43,14 @@ class EventsRepository implements IEventsRepository {
 
     public async findByInvitationCode(invitation_code: string): Promise<Event | undefined> {
         const event = await this.ormRepository.findOne({
-            invitation_code: invitation_code
+            where: { invitation_code },
+            relations: [
+                'created_by_user', 
+                'chosen_location', 
+                'chosen_schedule', 
+                'locations', 
+                'schedules'
+            ]
         })
 
         return event;
@@ -51,16 +58,16 @@ class EventsRepository implements IEventsRepository {
 
     public async findNearby(latitude:string, longitude: string, radius: number): Promise<Event[]>{
 
-        //todo: testar, adicionar requirimento que o evento tenha um local selecionado
         const nearby_events_id: EventId[] = await getRepository(Event).query(
             `
                 SELECT event.id
-                FROM events AS event INNER JOIN locations AS location ON event.id=location.event_id
-                WHERE ST_Distance(location.location, ST_MakePoint($1,$2)) < $3
+                FROM events AS event INNER JOIN locations AS location ON event.chosen_location_id=location.id
+                WHERE event.chosen_location_id IS NOT NULL
+                AND ST_Distance(location.location, ST_MakePoint($1,$2)) < $3
             `,
             [latitude, longitude, radius]
         )
-
+        
         if(!nearby_events_id.length){
             return [];
         }

@@ -23,6 +23,14 @@ class ParticipantsRepository implements IParticipantsRepository {
     public async save(participant: Participant): Promise<void> {
       this.ormRepository.save(participant);
     }
+
+    public async findByEventAndUser(event_id: string, user_id:string): Promise<Participant | undefined>{
+      const participant = await this.ormRepository.findOne({
+        where: { event_id, user_id }
+      });
+
+      return participant;
+    }
 }
 
 export default ParticipantsRepository;

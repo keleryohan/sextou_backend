@@ -20,16 +20,28 @@ class Voting{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column()
+    user_id: string;
+
     @ManyToOne(() => User)
     @JoinColumn({name: 'user_id'})
     user: User;
+
+    @Column()
+    event_id: string;
 
     @ManyToOne(() => Event)
     @JoinColumn({name: 'event_id'})
     event: Event;
 
+    @Column()
+    schedule_id: string;
+
+    @Column()
+    location_id: string;
+
     @ManyToOne(() => Schedule)
-    @JoinColumn({name: 'chedule_id'})
+    @JoinColumn({name: 'schedule_id'})
     chosenSchedule: Schedule;
 
     @ManyToOne(() => Location)
